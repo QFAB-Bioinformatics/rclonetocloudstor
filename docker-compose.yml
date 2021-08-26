@@ -1,0 +1,31 @@
+# For more information about rclone docker image and rclone api look at below sources
+# https://github.com/rclone/rclone/wiki/Docker-images
+# https://hub.docker.com/r/rclone/rclone
+# https://rclone.org/rc/
+version: '3.1'
+networks:
+  main:
+services:
+  rclone_service:
+    image: rclone/rclone
+    ports:
+      - "5572:5572" # By default rclone remote control will serve in port 5572
+    volumes:
+      - "~/.config/rclone:/config/rclone" # ~/.config/rclone folder has to be accesible so docker container can modify rclone.conf
+      - "~/data:/data:shared" # Folder where the data will be downloaded to and/or uploaded from
+    expose:
+      - "5572"
+    networks:
+      main:
+        aliases:
+          - rclone_service
+    command:
+      - "--verbose"
+      - "rcd" # Starts rclone in remote control mode https://rclone.org/commands/rclone_rcd/ 
+      - "/data" # Folder that will be served by rclone
+      - "--rc-addr" # For more information on why this flag is required look at 'install with docker' section in https://rclone.org/install/ 
+      - ":5572"
+      - "--rc-no-auth" # It's recomended to run rclone as a local service where your stack will also be placed behind a firewall 
+                       # for more information about how best serve other systems/apps https://github.com/rclone/rclone/wiki/%22serve%22-to-Another-Computer
+
+ 
