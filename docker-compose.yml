@@ -27,5 +27,6 @@ services:
       - ":5572"
       - "--rc-no-auth" # It's recomended to run rclone as a local service where your stack will also be placed behind a firewall 
                        # for more information about how best serve other systems/apps https://github.com/rclone/rclone/wiki/%22serve%22-to-Another-Computer
+      - "--rc-web-gui-no-open-browser" 
 
  
